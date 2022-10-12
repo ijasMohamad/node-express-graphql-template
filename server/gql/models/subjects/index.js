@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
 import { getNode } from '@gql/node';
 import { createConnection } from 'graphql-sequelize';
 import { timestamps } from '../timestamps';
@@ -7,7 +7,7 @@ import { totalConnectionFields } from '@utils/index';
 import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
 
 const { nodeInterface } = getNode();
-export const studentFields = {
+export const subjectFields = {
   id: {
     type: GraphQLID,
     [TYPE_ATTRIBUTES.isNonNull]: true
@@ -17,49 +17,50 @@ export const studentFields = {
     [TYPE_ATTRIBUTES.isNonNull]: true
   }
 };
-const Student = new GraphQLObjectType({
-  name: 'Student',
+const Subject = new GraphQLObjectType({
+  name: 'Subject',
   interfaces: [nodeInterface],
   fields: () => ({
-    ...getQueryFields(studentFields, TYPE_ATTRIBUTES.isNonNull),
+    ...getQueryFields(subjectFields, TYPE_ATTRIBUTES.isNonNull),
     ...timestamps
   })
 });
 
-const StudentConnection = createConnection({
-  name: 'students',
-  target: db.students,
-  nodeType: Student,
+const SubjectConnection = createConnection({
+  name: 'subjects',
+  target: db.subjects,
+  nodeType: Subject,
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
+
     return findOptions;
   },
   ...totalConnectionFields
 });
 
-export { StudentConnection, Student };
+export { SubjectConnection, Subject };
 
-// queries on the student table
-export const studentQueries = {
+// queries on the subject table
+export const SubjectQueries = {
   args: {
     id: {
       type: GraphQLNonNull(GraphQLInt)
     }
   },
   query: {
-    type: Student
+    type: Subject
   },
   list: {
-    ...StudentConnection,
-    resolve: StudentConnection.resolve,
-    type: StudentConnection.connectionType,
-    args: StudentConnection.connectionArgs
+    ...SubjectConnection,
+    resolve: SubjectConnection.resolve,
+    type: SubjectConnection.connectionType,
+    args: SubjectConnection.connectionArgs
   },
-  model: db.students
+  model: db.subjects
 };
 
-export const studentMutations = {
-  args: studentFields,
-  type: Student,
-  model: db.students
+export const subjectMutations = {
+  args: subjectFields,
+  type: Subject,
+  model: db.subjects
 };

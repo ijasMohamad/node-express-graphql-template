@@ -4,12 +4,13 @@ import { subjectsTable } from '@server/utils/testUtils/mockData';
 
 describe('Student graphQL-server-DB query tests', () => {
   const studentId = 1;
+  const offset = 0;
   const studentOne = `
     query {
       student (id: ${studentId}) {
         id
         name
-        subjects {
+        subjects (offset: ${offset}) {
           edges {
             node {
               id
@@ -19,7 +20,7 @@ describe('Student graphQL-server-DB query tests', () => {
       }
     }
   `;
-  it('should request for subjects related to the students', async () => {
+  it('should request for subjects related to the students with offset', async () => {
     const dbClient = mockDBClient();
     resetAndMockDB(null, {}, dbClient);
 
@@ -31,6 +32,32 @@ describe('Student graphQL-server-DB query tests', () => {
       expect(dbClient.models.subjects.findAll.mock.calls.length).toBe(1);
       expect(dbClient.models.subjects.findAll.mock.calls[0][0].include[0].where).toEqual({ studentId });
       expect(dbClient.models.subjects.findAll.mock.calls[0][0].include[0].model.name).toEqual('student_subjects');
+    });
+  });
+  const studentTest = `
+  query {
+    student (id: ${studentId}) {
+      id
+      name
+      subjects {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+  `;
+  it('should request for subjects related to the students', async () => {
+    const dbClient = mockDBClient();
+    resetAndMockDB(null, {}, dbClient);
+
+    jest.spyOn(dbClient.models.subjects, 'findAll').mockImplementation(() => [subjectsTable[0]]);
+
+    await getResponse(studentTest).then(response => {
+      console.log('Response => ', response);
+      expect(get(response, 'body.errors')).toBeTruthy();
     });
   });
 });

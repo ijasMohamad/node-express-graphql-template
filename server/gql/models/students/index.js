@@ -5,24 +5,28 @@ import { timestamps } from '../timestamps';
 import db from '@database/models';
 import { totalConnectionFields } from '@utils/index';
 import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
+import { sequelizedWhere } from '@server/database/dbUtils';
+import { subjectQueries } from '../subjects';
 
 const { nodeInterface } = getNode();
-export const studentFields = {
-  id: {
-    type: GraphQLID,
-    [TYPE_ATTRIBUTES.isNonNull]: true
-  },
-  name: {
-    type: GraphQLString,
-    [TYPE_ATTRIBUTES.isNonNull]: true
-  }
+
+export const studentsFields = {
+  id: { type: GraphQLNonNull(GraphQLID) },
+  name: { type: GraphQLString },
+  subjectId: { type: GraphQLID }
 };
+
 const Student = new GraphQLObjectType({
   name: 'Student',
   interfaces: [nodeInterface],
   fields: () => ({
-    ...getQueryFields(studentFields, TYPE_ATTRIBUTES.isNonNull),
-    ...timestamps
+    ...getQueryFields(studentsFields, TYPE_ATTRIBUTES.isNonNull),
+    ...timestamps,
+    subjects: {
+      ...subjectQueries.list,
+      resolve: (source, args, context, info) =>
+        subjectQueries.list.resolve(source, args, { ...context, student: source.dataValues }, info)
+    }
   })
 });
 
@@ -32,6 +36,16 @@ const StudentConnection = createConnection({
   nodeType: Student,
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
+
+    if (context?.subject?.id) {
+      findOptions.include.push({
+        model: db.studentSubjects,
+        where: {
+          subjectId: context.subject.id
+        }
+      });
+    }
+    findOptions.where = sequelizedWhere(findOptions.where, args.where);
     return findOptions;
   },
   ...totalConnectionFields
@@ -59,7 +73,7 @@ export const studentQueries = {
 };
 
 export const studentMutations = {
-  args: studentFields,
+  args: studentsFields,
   type: Student,
   model: db.students
 };

@@ -1,5 +1,4 @@
 import express from 'express';
-import { graphqlHTTP } from 'express-graphql';
 import { GraphQLSchema } from 'graphql';
 import dotenv from 'dotenv';
 import { QueryRoot } from '@gql/queries';
@@ -7,6 +6,8 @@ import { MutationRoot } from '@gql/mutations';
 import { client } from '@database';
 import graphqlDepthLimit from 'graphql-depth-limit';
 import { SubscriptionRoot } from '@gql/subscriptions';
+import { ApolloServer } from 'apollo-server-express';
+import { logger } from '..';
 
 const connect = async () => {
   await client.authenticate();
@@ -20,10 +21,9 @@ dotenv.config({ path: `.env.${process.env.ENVIRONMENT_NAME}` });
 // create the graphQL schema
 const schema = new GraphQLSchema({ query: QueryRoot, mutation: MutationRoot, subscription: SubscriptionRoot });
 
-const testApp = express();
-testApp.use(
-  '/graphql',
-  graphqlHTTP({
+const getTestApp = async () => {
+  const testApp = express();
+  const server = new ApolloServer({
     schema,
     graphiql: false,
     validationRules: [graphqlDepthLimit(6)],
@@ -33,17 +33,17 @@ testApp.use(
       }
       return e;
     }
-  }),
-  (request, response, next) => {
-    next();
-  }
-);
+  });
+  await server.start();
 
-testApp.use('/', (_, response) => {
-  response
-    .status(200)
-    .json({ message: 'OK' })
-    .send();
-});
+  server.applyMiddleware({ app: testApp });
+  testApp.use('/', (_, response) => {
+    response
+      .status(200)
+      .json({ message: 'OK' })
+      .send();
+  });
+  return testApp;
+};
 
-export { testApp };
+export { getTestApp };

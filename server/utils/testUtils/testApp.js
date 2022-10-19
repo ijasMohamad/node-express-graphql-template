@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { QueryRoot } from '@gql/queries';
 import { MutationRoot } from '@gql/mutations';
 import { client } from '@database';
+import graphqlDepthLimit from 'graphql-depth-limit';
 import { SubscriptionRoot } from '@gql/subscriptions';
 
 const connect = async () => {
@@ -25,6 +26,7 @@ testApp.use(
   graphqlHTTP({
     schema,
     graphiql: false,
+    validationRules: [graphqlDepthLimit(6)],
     customFormatErrorFn: e => {
       if (process.env.ENVIRONMENT_NAME !== 'local') {
         return e.message;

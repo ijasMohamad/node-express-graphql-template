@@ -36,11 +36,6 @@ export const SubjectConnection = createConnection({
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
 
-    // If the offset is not provided, then it will return response as null.
-    if (args?.offset === undefined) {
-      console.log('Subject offset is null, add offset');
-      return null;
-    }
     if (context?.student?.id) {
       findOptions.include.push({
         model: db.studentSubjects,
@@ -70,8 +65,8 @@ export const subjectQuery = {
     type: SubjectConnection.connectionType,
     args: {
       ...SubjectConnection.connectionArgs,
-      limit: { type: GraphQLInt, description: 'Use with offset to get paginated results with total' },
-      offset: { type: GraphQLInt, description: 'Use with limit to get paginated results with total' }
+      limit: { type: GraphQLNonNull(GraphQLInt), description: 'Use with offset to get paginated results with total' },
+      offset: { type: GraphQLNonNull(GraphQLInt), description: 'Use with limit to get paginated results with total' }
     }
   },
   model: db.subjects

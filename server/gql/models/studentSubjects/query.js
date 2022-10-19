@@ -30,11 +30,6 @@ export const StudentSubjectConnection = createConnection({
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
 
-    // If the offset is not provided, then it will return the response as null.
-    if (args?.offset === undefined) {
-      console.log('Offset is null, add offset');
-      return null;
-    }
     findOptions.where = sequelizedWhere(findOptions.where, args.where);
     return findOptions;
   },

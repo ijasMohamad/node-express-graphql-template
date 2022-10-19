@@ -27,8 +27,14 @@ export const addQueries = () => {
       args: {
         ...DB_TABLES[table].list?.args,
         ...defaultListArgs(DB_TABLES[table].model),
-        limit: { type: GraphQLNonNull(GraphQLInt), description: 'Use with offset to get paginated results with total' },
-        offset: { type: GraphQLNonNull(GraphQLInt), description: 'Use with limit to get paginated results with total' }
+        limit: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'Use with offset to get paginated results with total'
+        },
+        offset: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'Use with limit to get paginated results with total'
+        }
       }
     };
   });

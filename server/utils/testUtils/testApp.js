@@ -7,6 +7,7 @@ import { client } from '@database';
 import { SubscriptionRoot } from '@gql/subscriptions';
 import { ApolloServer } from 'apollo-server-express';
 import { logger } from '..';
+import depthLimit from 'graphql-depth-limit';
 
 const connect = async () => {
   await client.authenticate();
@@ -24,6 +25,7 @@ const getTestApp = async () => {
   const testApp = express();
   const server = new ApolloServer({
     schema,
+    validationRules: [depthLimit(6)],
     formatError: e => {
       logger().info({ e });
       return e.message;

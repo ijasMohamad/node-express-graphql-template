@@ -11,7 +11,7 @@ import { timestamps } from '../timestamps';
 const { nodeInterface } = getNode();
 
 export const studentsFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
+  id: { type: new GraphQLNonNull(GraphQLID) },
   name: { type: GraphQLString }
 };
 
@@ -54,7 +54,7 @@ export const StudentConnection = createConnection({
 export const studentQuery = {
   args: {
     id: {
-      type: GraphQLNonNull(GraphQLInt)
+      type: new GraphQLNonNull(GraphQLInt)
     }
   },
   query: {
@@ -66,8 +66,14 @@ export const studentQuery = {
     type: StudentConnection.connectionType,
     args: {
       ...StudentConnection.connectionArgs,
-      limit: { type: GraphQLNonNull(GraphQLInt), description: 'Use with offset to get paginated results with total' },
-      offset: { type: GraphQLNonNull(GraphQLInt), description: 'Use with limit to get paginated results with total' }
+      limit: {
+        type: new GraphQLNonNull(GraphQLInt),
+        description: 'Use with offset to get paginated results with total'
+      },
+      offset: {
+        type: new GraphQLNonNull(GraphQLInt),
+        description: 'Use with limit to get paginated results with total'
+      }
     }
   },
   model: db.students

@@ -3,7 +3,7 @@ import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { subject } from './query';
 
 export const subjectMutationFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
+  id: { type: new GraphQLNonNull(GraphQLID) },
   name: { type: GraphQLString },
   studentId: { type: GraphQLID }
 };

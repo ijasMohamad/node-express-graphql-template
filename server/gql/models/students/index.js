@@ -38,7 +38,6 @@ const StudentConnection = createConnection({
     findOptions.include = findOptions.include || [];
 
     if (context?.subject?.id) {
-      console.log('running or not');
       findOptions.include.push({
         model: db.studentSubjects,
         where: {

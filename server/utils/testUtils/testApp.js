@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import { QueryRoot } from '@gql/queries';
 import { MutationRoot } from '@gql/mutations';
 import { client } from '@database';
-import graphqlDepthLimit from 'graphql-depth-limit';
 import { SubscriptionRoot } from '@gql/subscriptions';
 import { ApolloServer } from 'apollo-server-express';
 import { logger } from '..';
@@ -25,13 +24,9 @@ const getTestApp = async () => {
   const testApp = express();
   const server = new ApolloServer({
     schema,
-    graphiql: false,
-    validationRules: [graphqlDepthLimit(6)],
-    customFormatErrorFn: e => {
-      if (process.env.ENVIRONMENT_NAME !== 'local') {
-        return e.message;
-      }
-      return e;
+    formatError: e => {
+      logger().info({ e });
+      return e.message;
     }
   });
   await server.start();

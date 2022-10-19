@@ -7,7 +7,6 @@ import { connect } from '@database';
 import { sendMessage } from '@services/slack';
 import get from 'lodash/get';
 import { flatMap } from 'lodash';
-import { request } from 'http';
 
 const { parse } = require('graphql');
 
@@ -58,8 +57,9 @@ export const apolloServerContextResolver = async ({ req, res }) => {
 };
 export const isAuthenticated = async (req, res, next) => {
   try {
+    console.log({ ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME });
     // For accessing graphql without authentication when debugging.
-    if (isTestEnv() || (await isPublicQuery(req))) {
+    if (isLocalEnv() || isTestEnv() || (await isPublicQuery(req))) {
       next(req);
     } else {
       const accessTokenFromClient = req.headers.authorization;
@@ -95,7 +95,6 @@ export const isAuthenticated = async (req, res, next) => {
                 isUnauthorized = item.isUnauthorized ? await item.isUnauthorized(response, args) : false;
               }
             }
-            
             if (isUnauthorized) {
               return invalidScope(res);
             }

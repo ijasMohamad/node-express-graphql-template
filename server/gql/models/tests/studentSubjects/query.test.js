@@ -28,4 +28,24 @@ describe('student_subject graphQL-server-DB query tests', () => {
       );
     });
   });
+  const studentSubjectAll = `
+  query {
+    studentSubjects {
+      edges {
+        node {
+          id
+          studentId
+          subjectId
+        }
+      }
+    }
+  }
+  `;
+  it('should request for students and subjects related to the studentSubjects with offset', async () => {
+    const dbClient = mockDBClient();
+    resetAndMockDB(null, {}, dbClient);
+    await getResponse(studentSubjectAll).then(response => {
+      expect(get(response, 'body.errors')).toBeTruthy();
+    });
+  });
 });

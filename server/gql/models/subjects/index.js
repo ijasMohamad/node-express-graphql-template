@@ -10,7 +10,7 @@ import { studentQueries } from '../students';
 
 const { nodeInterface } = getNode();
 export const subjectFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
+  id: { type: new GraphQLNonNull(GraphQLID) },
   name: { type: GraphQLString }
 };
 const Subject = new GraphQLObjectType({
@@ -54,7 +54,7 @@ export { SubjectConnection, Subject };
 export const subjectQueries = {
   args: {
     id: {
-      type: GraphQLNonNull(GraphQLInt)
+      type: new GraphQLNonNull(GraphQLInt)
     }
   },
   query: {

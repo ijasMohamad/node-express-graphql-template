@@ -11,7 +11,7 @@ import { subjectQueries } from '../subjects';
 const { nodeInterface } = getNode();
 
 export const studentsFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
+  id: { type: new GraphQLNonNull(GraphQLID) },
   name: { type: GraphQLString },
   subjectId: { type: GraphQLID }
 };
@@ -57,7 +57,7 @@ export { StudentConnection, Student };
 export const studentQueries = {
   args: {
     id: {
-      type: GraphQLNonNull(GraphQLInt)
+      type: new GraphQLNonNull(GraphQLInt)
     }
   },
   query: {

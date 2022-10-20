@@ -10,9 +10,9 @@ import { timestamps } from '../timestamps';
 const { nodeInterface } = getNode();
 
 export const studentSubjectFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
-  studentId: { type: GraphQLNonNull(GraphQLID) },
-  subjectId: { type: GraphQLNonNull(GraphQLID) }
+  id: { type: new GraphQLNonNull(GraphQLID) },
+  studentId: { type: new GraphQLNonNull(GraphQLID) },
+  subjectId: { type: new GraphQLNonNull(GraphQLID) }
 };
 export const studentSubject = new GraphQLObjectType({
   name: 'StudentSubject',
@@ -39,7 +39,7 @@ export const StudentSubjectConnection = createConnection({
 export const studentSubjectQuery = {
   args: {
     id: {
-      type: GraphQLNonNull(GraphQLInt)
+      type: new GraphQLNonNull(GraphQLInt)
     }
   },
   query: {

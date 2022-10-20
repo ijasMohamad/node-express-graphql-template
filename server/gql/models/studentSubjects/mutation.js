@@ -3,9 +3,9 @@ import { GraphQLID, GraphQLNonNull } from 'graphql';
 import { studentSubject } from './query';
 
 export const studentSubjectMutationFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
-  studentId: { type: GraphQLNonNull(GraphQLID) },
-  subjectId: { type: GraphQLNonNull(GraphQLID) }
+  id: { type: new GraphQLNonNull(GraphQLID) },
+  studentId: { type: new GraphQLNonNull(GraphQLID) },
+  subjectId: { type: new GraphQLNonNull(GraphQLID) }
 };
 
 export const studentSubjectMutation = {

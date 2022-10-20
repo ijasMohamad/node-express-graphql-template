@@ -20,7 +20,7 @@ describe('Student graphQL-server-DB query tests', () => {
       }
     }
   `;
-  it('should request for subjects related to the students with offset and limit', async () => {
+  it('should request for subjects related to the students', async () => {
     const dbClient = mockDBClient();
     resetAndMockDB(null, {}, dbClient);
 

@@ -45,11 +45,22 @@ export const isPublicQuery = async req => {
   return queries.every(({ queryName, operationType }) => GQL_QUERY_TYPES[operationType].whitelist.includes(queryName));
 };
 
+export const apolloServerContextResolver = async ({ req, res }) => {
+  const response = await new Promise((resolve, reject) => {
+    isAuthenticated(req, res, () => {
+      resolve(req);
+    }).catch(err => {
+      reject(err);
+    });
+  });
+  return response;
+};
 export const isAuthenticated = async (req, res, next) => {
   try {
+    console.log({ ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME });
     // For accessing graphql without authentication when debugging.
     if (isLocalEnv() || isTestEnv() || (await isPublicQuery(req))) {
-      next();
+      next(req);
     } else {
       const accessTokenFromClient = req.headers.authorization;
       let args;
@@ -87,9 +98,9 @@ export const isAuthenticated = async (req, res, next) => {
             if (isUnauthorized) {
               return invalidScope(res);
             }
-
+            req.userId = response.user.id;
             logger().info(JSON.stringify(response));
-            next();
+            next(req);
           })
           .catch(err => {
             logger().info(err);

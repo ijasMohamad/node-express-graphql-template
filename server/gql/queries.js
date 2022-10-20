@@ -17,7 +17,7 @@ export const addQueries = () => {
       ...DB_TABLES[table].query,
       resolve: resolver(DB_TABLES[table].model),
       args: {
-        id: { type: GraphQLNonNull(GraphQLInt) },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
         ...DB_TABLES[table].args,
         ...defaultArgs(DB_TABLES[table].model)
       }
@@ -27,8 +27,14 @@ export const addQueries = () => {
       args: {
         ...DB_TABLES[table].list?.args,
         ...defaultListArgs(DB_TABLES[table].model),
-        limit: { type: GraphQLInt, description: 'Use with offset to get paginated results with total' },
-        offset: { type: GraphQLInt, description: 'Use with limit to get paginated results with total' }
+        limit: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'Use with offset to get paginated results with total'
+        },
+        offset: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'Use with limit to get paginated results with total'
+        }
       }
     };
   });

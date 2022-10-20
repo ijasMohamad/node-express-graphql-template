@@ -1,3 +1,4 @@
+import { studentSubjectsTable } from '@server/utils/testUtils/mockData';
 import { getResponse, mockDBClient, resetAndMockDB } from '@utils/testUtils';
 import get from 'lodash/get';
 
@@ -16,7 +17,15 @@ describe('student_subject graphQL-server-DB query tests', () => {
     const dbClient = mockDBClient();
     resetAndMockDB(null, {}, dbClient);
     await getResponse(studentSubjectOne).then(response => {
-      expect(get(response, 'body.data.studentSubject')).toBeTruthy();
+      const result = get(response, 'body.data.studentSubject');
+      expect(result).toBeTruthy();
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: studentSubjectsTable[0].id,
+          studentId: studentSubjectsTable[0].studentId.toString(),
+          subjectId: studentSubjectsTable[0].subjectId.toString()
+        })
+      );
     });
   });
 });

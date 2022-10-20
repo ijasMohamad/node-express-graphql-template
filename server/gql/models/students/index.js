@@ -11,7 +11,7 @@ import { subjectQueries } from '../subjects';
 const { nodeInterface } = getNode();
 
 export const studentsFields = {
-  id: { type: GraphQLNonNull(GraphQLID) },
+  id: { type: new GraphQLNonNull(GraphQLID) },
   name: { type: GraphQLString },
   subjectId: { type: GraphQLID }
 };
@@ -36,8 +36,8 @@ const StudentConnection = createConnection({
   nodeType: Student,
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
-
     if (context?.subject?.id) {
+      console.log('running or not');
       findOptions.include.push({
         model: db.studentSubjects,
         where: {
@@ -57,7 +57,7 @@ export { StudentConnection, Student };
 export const studentQueries = {
   args: {
     id: {
-      type: GraphQLNonNull(GraphQLInt)
+      type: new GraphQLNonNull(GraphQLInt)
     }
   },
   query: {

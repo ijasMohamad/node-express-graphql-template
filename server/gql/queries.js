@@ -5,9 +5,10 @@ import { defaultListArgs, defaultArgs, resolver } from 'graphql-sequelize';
 import { Aggregate } from '@gql/models/aggregate';
 import { getNode } from '@gql/node';
 import { getGqlModels } from '@server/utils/autogenHelper';
+import { limitAndOffset } from './models/limitAndOffset';
 
 const { nodeField } = getNode();
-const DB_TABLES = getGqlModels({ type: 'Queries', blacklist: ['aggregate', 'timestamps'] });
+const DB_TABLES = getGqlModels({ type: 'Queries', blacklist: ['aggregate', 'timestamps', 'limitAndOffset'] });
 export const addQueries = () => {
   const query = {
     aggregate: Aggregate
@@ -27,14 +28,7 @@ export const addQueries = () => {
       args: {
         ...DB_TABLES[table].list?.args,
         ...defaultListArgs(DB_TABLES[table].model),
-        limit: {
-          type: new GraphQLNonNull(GraphQLInt),
-          description: 'Use with offset to get paginated results with total'
-        },
-        offset: {
-          type: new GraphQLNonNull(GraphQLInt),
-          description: 'Use with limit to get paginated results with total'
-        }
+        ...limitAndOffset
       }
     };
   });

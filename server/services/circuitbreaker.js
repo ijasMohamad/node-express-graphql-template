@@ -14,7 +14,6 @@ export const newCircuitBreaker = (func, fallbackMsg) => {
     logger().error('inside circuitbreaker fallback', err);
     sendMessage(err);
     logger().error('fallbackMsg: ', fallbackMsg, 'params: ', params, 'error:', err.message);
-    // eslint-disable-next-line
     return `${fallbackMsg}. ${err.message || err}`;
   });
   return breaker;

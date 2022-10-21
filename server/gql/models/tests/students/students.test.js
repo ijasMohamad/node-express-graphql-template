@@ -4,7 +4,7 @@ import { createFieldsWithType, expectSameTypeNameOrKind } from '@utils/testUtils
 import { QueryRoot } from '../../../queries';
 import { MutationRoot } from '../../../mutations';
 import { studentFields } from '@gql/models/students';
-import { timestamps } from '@gql/models/timestamps';
+import { timestamps } from '@server/gql/fields/timestamps';
 
 const schema = new GraphQLSchema({ query: QueryRoot, mutation: MutationRoot });
 

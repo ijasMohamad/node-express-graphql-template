@@ -31,7 +31,7 @@ export const createResolvers = (model, customResolver) => ({
     customResolver ? customResolver(model, args, context) : deleteUsingId(model, args)
 });
 
-export const DB_TABLES = getGqlModels({ type: 'Mutations', blacklist: ['aggregate', 'timestamps', 'limitAndOffset'] });
+export const DB_TABLES = getGqlModels({ type: 'Mutations', blacklist: ['aggregate'] });
 
 export const addMutations = () => {
   const mutations = {};

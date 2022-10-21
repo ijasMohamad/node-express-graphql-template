@@ -5,10 +5,10 @@ import { defaultListArgs, defaultArgs, resolver } from 'graphql-sequelize';
 import { Aggregate } from '@gql/models/aggregate';
 import { getNode } from '@gql/node';
 import { getGqlModels } from '@server/utils/autogenHelper';
-import { limitAndOffset } from './models/limitAndOffset';
+import { limitAndOffset } from './fields/limitAndOffset';
 
 const { nodeField } = getNode();
-const DB_TABLES = getGqlModels({ type: 'Queries', blacklist: ['aggregate', 'timestamps', 'limitAndOffset'] });
+const DB_TABLES = getGqlModels({ type: 'Queries', blacklist: ['aggregate'] });
 export const addQueries = () => {
   const query = {
     aggregate: Aggregate

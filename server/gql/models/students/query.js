@@ -7,7 +7,7 @@ import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString
 import { createConnection } from 'graphql-sequelize';
 import { limitAndOffset } from '../../fields/limitAndOffset';
 import { subjectQueries } from '../subjects';
-import { timestamps } from '../../fields/timestamps';
+import { timestamps } from '@gqlFields/timestamps';
 
 const { nodeInterface } = getNode();
 

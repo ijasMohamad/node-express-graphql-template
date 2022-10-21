@@ -3,7 +3,7 @@ import { graphqlSync, GraphQLSchema } from 'graphql';
 import { createFieldsWithType, expectSameTypeNameOrKind } from '@utils/testUtils';
 import { QueryRoot } from '../../../queries';
 import { MutationRoot } from '../../../mutations';
-import { timestamps } from '@server/gql/fields/timestamps';
+import { timestamps } from '@gqlFields/timestamps';
 import { storeProductFields } from '@gql/models/storeProducts';
 
 const schema = new GraphQLSchema({ query: QueryRoot, mutation: MutationRoot });

@@ -4,7 +4,7 @@ import { MutationRoot } from '../../../mutations';
 import { GraphQLSchema, graphqlSync } from 'graphql';
 import { createFieldsWithType, expectSameTypeNameOrKind } from '@server/utils/testUtils';
 import { subjectFields } from '../../subjects';
-import { timestamps } from '../../timestamps';
+import { timestamps } from '../../../fields/timestamps';
 
 const schema = new GraphQLSchema({ query: QueryRoot, mutation: MutationRoot });
 

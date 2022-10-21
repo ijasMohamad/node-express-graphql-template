@@ -5,9 +5,9 @@ import { totalConnectionFields } from '@server/utils';
 import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
 import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { createConnection } from 'graphql-sequelize';
-import { limitAndOffset } from '../limitAndOffset';
+import { limitAndOffset } from '../../fields/limitAndOffset';
 import { subjectQueries } from '../subjects';
-import { timestamps } from '../timestamps';
+import { timestamps } from '../../fields/timestamps';
 
 const { nodeInterface } = getNode();
 

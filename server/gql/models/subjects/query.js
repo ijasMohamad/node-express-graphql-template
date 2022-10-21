@@ -5,6 +5,7 @@ import { totalConnectionFields } from '@server/utils';
 import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
 import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { createConnection } from 'graphql-sequelize';
+import { limitAndOffset } from '../limitAndOffset';
 import { studentQueries } from '../students';
 import { timestamps } from '../timestamps';
 
@@ -65,14 +66,7 @@ export const subjectQuery = {
     type: SubjectConnection.connectionType,
     args: {
       ...SubjectConnection.connectionArgs,
-      limit: {
-        type: new GraphQLNonNull(GraphQLInt),
-        description: 'Use with offset to get paginated results with total'
-      },
-      offset: {
-        type: new GraphQLNonNull(GraphQLInt),
-        description: 'Use with limit to get paginated results with total'
-      }
+      ...limitAndOffset
     }
   },
   model: db.subjects

@@ -164,7 +164,8 @@
     "@daos": "./server/daos",
     "@middleware": "./server/middleware",
     "@gql": "./server/gql",
-    "@config": "config"
+    "@config": "config",
+    "@gqlFields": "./server/gql/fields"
   },
   "husky": {
     "hooks": {

@@ -32,8 +32,8 @@ const Student = new GraphQLObjectType({
 
 export { StudentConnection, Student };
 
-// exporting queries on the student table.
+// exporting queries on the students table.
 export const studentQueries = studentQuery;
 
-// exporting mutations on the student table.
+// exporting mutations on the students table.
 export const studentMutations = studentMutation;

@@ -124,7 +124,8 @@ module.exports = (options = {}) => ({
       '@daos': path.resolve(__dirname, './server/daos'),
       '@database': path.resolve(__dirname, './server/database'),
       '@gql': path.resolve(__dirname, './server/gql'),
-      '@config': path.resolve(__dirname, 'config')
+      '@config': path.resolve(__dirname, 'config'),
+      '@gqlFields': path.resolve(__dirname, './server/gql/fields')
     },
     extensions: ['.js'],
     mainFields: ['browser', 'jsnext:main', 'main']

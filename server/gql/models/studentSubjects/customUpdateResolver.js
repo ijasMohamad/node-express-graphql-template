@@ -1,4 +1,6 @@
-import { updateStudent, updateSubject, updateStudentSubject } from '@server/daos/studentSubjects';
+import { updateStudent } from '@server/daos/students';
+import { updateStudentSubject } from '@server/daos/studentSubjects';
+import { updateSubject } from '@server/daos/subjects';
 import { transformSQLError } from '@server/utils';
 
 export const customUpdateResolver = async (model, args, context) => {
@@ -19,8 +21,7 @@ export const customUpdateResolver = async (model, args, context) => {
       delete args.subjectName;
       await updateSubject(subjectArgs);
     }
-    const res = await updateStudentSubject(args);
-    return res;
+    return updateStudentSubject(args);
   } catch (err) {
     return transformSQLError(err);
   }

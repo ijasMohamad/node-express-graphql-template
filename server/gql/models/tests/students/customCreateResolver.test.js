@@ -30,6 +30,10 @@ describe('Student graphql-server-db customCreateResolver test', () => {
   }
   `;
   it('should have mutation to create a new student with subject', async () => {
+    jest.spyOn(dbClient.models.sequelize, 'transaction');
+
+    jest.spyOn(dbClient.models.students, 'create');
+
     await getResponse(createStudentWithSubjectMutation).then(response => {
       const result = get(response, 'body.data.createStudent');
       expect(result).toMatchObject({
@@ -42,6 +46,7 @@ describe('Student graphql-server-db customCreateResolver test', () => {
   it('should throw custom error when there is error in creatingStudentWithSubject', async () => {
     const studentSubjects = require('@daos/studentSubjects');
     const utils = require('@utils');
+    jest.spyOn(dbClient.models.sequelize, 'transaction');
     jest.spyOn(studentSubjects, 'insertStudentSubjects').mockImplementation(() => {
       throw new Error();
     });

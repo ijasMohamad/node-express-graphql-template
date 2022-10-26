@@ -23,15 +23,19 @@ describe('StudentSubject graphql-server-db customUpdateResolver tests', () => {
   }
   `;
   it('should have mutation to update a new student', async () => {
+    jest.spyOn(dbClient.models.sequelize, 'transaction');
+
     jest.spyOn(dbClient.models.studentSubjects, 'update');
-    const response = await getResponse(updateStudentSubjectMutation);
-    const result = get(response, 'body.data.updateStudentSubject');
-    expect(result).toBeTruthy();
-    expect(dbClient.models.studentSubjects.update.mock.calls.length).toBe(1);
-    expect(dbClient.models.studentSubjects.update.mock.calls[0][0]).toEqual({
-      id: id.toString(),
-      studentId: studentsTable[0].id,
-      subjectId: subjectsTable[0].id
+
+    await getResponse(updateStudentSubjectMutation).then(response => {
+      const result = get(response, 'body.data.updateStudentSubject');
+      expect(result).toBeTruthy();
+      expect(dbClient.models.studentSubjects.update.mock.calls.length).toBe(1);
+      expect(dbClient.models.studentSubjects.update.mock.calls[0][0]).toEqual({
+        id: id.toString(),
+        studentId: studentsTable[0].id,
+        subjectId: subjectsTable[0].id
+      });
     });
   });
   it('should throw custom error when there is error in updatingStudentSubject', async () => {
@@ -59,7 +63,7 @@ describe('StudentSubject graphql-server-db customUpdateResolver tests', () => {
     }
   }
   `;
-  it('should have mutation to update a new student', async () => {
+  it('should have mutation to update a new student with name', async () => {
     jest.spyOn(dbClient.models.studentSubjects, 'update');
     const response = await getResponse(updateStudentSubjectWithNameMutation);
     const result = get(response, 'body.data.updateStudentSubject');

@@ -30,6 +30,10 @@ describe('Subject graphQL-server-DB mutation tests', () => {
     }
   `;
   it('should have mutation to create a new subject with student', async () => {
+    jest.spyOn(dbClient.models.sequelize, 'transaction');
+
+    jest.spyOn(dbClient.models.subjects, 'create');
+
     await getResponse(createSubjectWithStudentMutation).then(response => {
       const result = get(response, 'body.data.createSubject');
       expect(result).toMatchObject({

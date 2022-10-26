@@ -5,23 +5,23 @@ import db from '@database/models';
 
 export const customCreateResolver = async (model, args, context) => {
   // First, we start a transaction from connection and save it into a variable
-  const t = await db.sequelize.transaction();
+  const transaction = await db.sequelize.transaction();
   try {
     // Then, do some calls passing this transaction as an option:
-    const res = await insertStudent(args, { transaction: t });
+    const res = await insertStudent(args, { transaction });
 
     args.studentId = res?.id;
     delete args.name;
 
-    await insertStudentSubjects(args, { transaction: t });
+    await insertStudentSubjects(args, { transaction });
     // If the execution reaches this line, no errors were thrown.
     // We commit the transaction.
-    await t.commit();
+    await transaction.commit();
     return res;
   } catch (err) {
     // If the execution reaches this line, an error was thrown.
     // We rollback the transaction.
-    await t.rollback();
+    await transaction.rollback();
     throw transformSQLError(err);
   }
 };

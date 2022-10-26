@@ -1,10 +1,6 @@
-import db from '@database/models';
-import { sequelizedWhere } from '@server/database/dbUtils';
 import { getNode } from '@server/gql/node';
-import { totalConnectionFields } from '@server/utils';
 import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
-import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import { createConnection } from 'graphql-sequelize';
+import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { timestamps } from '@gqlFields/timestamps';
 
 const { nodeInterface } = getNode();
@@ -14,6 +10,7 @@ export const studentSubjectFields = {
   studentId: { type: new GraphQLNonNull(GraphQLID) },
   subjectId: { type: new GraphQLNonNull(GraphQLID) }
 };
+
 export const studentSubject = new GraphQLObjectType({
   name: 'StudentSubject',
   interfaces: [nodeInterface],
@@ -22,34 +19,3 @@ export const studentSubject = new GraphQLObjectType({
     ...timestamps
   })
 });
-
-export const StudentSubjectConnection = createConnection({
-  nodeType: studentSubject,
-  name: 'studentSubjects',
-  target: db.studentSubjects,
-  before: (findOptions, args, context) => {
-    findOptions.include = findOptions.include || [];
-
-    findOptions.where = sequelizedWhere(findOptions.where, args.where);
-    return findOptions;
-  },
-  ...totalConnectionFields
-});
-
-export const studentSubjectQuery = {
-  args: {
-    id: {
-      type: new GraphQLNonNull(GraphQLInt)
-    }
-  },
-  query: {
-    type: studentSubject
-  },
-  list: {
-    ...StudentSubjectConnection,
-    resolve: StudentSubjectConnection.resolve,
-    type: StudentSubjectConnection.connectionType,
-    args: StudentSubjectConnection.connectionArgs
-  },
-  model: db.studentSubjects
-};

@@ -1,12 +1,31 @@
-import { studentSubject, studentSubjectQuery, StudentSubjectConnection } from './query';
+import { studentSubject } from './query';
+import { studentSubjectConnection } from './list';
+import { GraphQLInt, GraphQLNonNull } from 'graphql';
+import db from '@server/database/models';
 import { studentSubjectMutation } from './mutation';
 
-const StudentSubject = studentSubject;
+export const StudentSubject = studentSubject;
 
 // export const StudentSubjectConnection = studentSubjectConnection;
-export { StudentSubjectConnection, StudentSubject };
+export const StudentSubjectConnection = studentSubjectConnection;
 
 // queries on the studentSubjects table
-export const studentSubjectQueries = studentSubjectQuery;
+export const studentSubjectQueries = {
+  args: {
+    id: {
+      type: new GraphQLNonNull(GraphQLInt)
+    }
+  },
+  query: {
+    type: studentSubject
+  },
+  list: {
+    ...StudentSubjectConnection,
+    resolve: StudentSubjectConnection.resolve,
+    type: StudentSubjectConnection.connectionType,
+    args: StudentSubjectConnection.connectionArgs
+  },
+  model: db.studentSubjects
+};
 
 export const studentSubjectMutations = studentSubjectMutation;

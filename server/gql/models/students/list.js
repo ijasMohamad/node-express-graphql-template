@@ -1,13 +1,13 @@
+import { createConnection } from 'graphql-sequelize';
 import db from '@database/models';
-import { student } from './query';
+import { GraphQLStudent } from './model';
 import { sequelizedWhere } from '@server/database/dbUtils';
 import { totalConnectionFields } from '@server/utils';
-import { createConnection } from 'graphql-sequelize';
 
 export const studentConnection = createConnection({
   name: 'students',
   target: db.students,
-  nodeType: student,
+  nodeType: GraphQLStudent,
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
 

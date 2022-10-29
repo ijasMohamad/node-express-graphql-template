@@ -8,19 +8,6 @@ describe('Student graphQL-server-DB mutation tests', () => {
     dbClient = mockDBClient();
     resetAndMockDB(null, {}, dbClient);
   });
-  const createStudentMutation = `
-    mutation {
-      createStudent (
-        name: "${studentsTable[0].name}"
-      ) {
-        id
-        name
-        createdAt
-        updatedAt
-        deletedAt
-      }
-    }
-  `;
 
   const updateStudentMutation = `
     mutation {
@@ -42,25 +29,12 @@ describe('Student graphQL-server-DB mutation tests', () => {
       }
     }
   `;
-
-  it('should have mutation to create a new student', async () => {
-    jest.spyOn(dbClient.models.students, 'create');
-    const response = await getResponse(createStudentMutation);
-    const result = get(response, 'body.data.createStudent');
-    expect(result).toBeTruthy();
-    const { id, ...student } = studentsTable[0];
-    expect(dbClient.models.students.create.mock.calls.length).toBe(1);
-    expect(dbClient.models.students.create.mock.calls[0][0]).toEqual({
-      ...student
-    });
-  });
   it('should have a mutation to update a new student', async () => {
     jest.spyOn(dbClient.models.students, 'update');
     const response = await getResponse(updateStudentMutation);
     const result = get(response, 'body.data.updateStudent');
     expect(result).toBeTruthy();
     expect(dbClient.models.students.update.mock.calls.length).toBe(1);
-    console.log(dbClient.models.students.update.mock.calls[0][0]);
     expect(dbClient.models.students.update.mock.calls[0][0]).toEqual({
       id: studentsTable[0].id.toString(),
       name: studentsTable[0].name

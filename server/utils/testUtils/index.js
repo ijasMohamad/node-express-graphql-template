@@ -153,7 +153,15 @@ export function mockDBClient(config = { total: 10 }) {
       users: usersMock,
       students: studentsMock,
       subjects: subjectsMock,
-      studentSubjects: studentSubjectsMock
+      studentSubjects: studentSubjectsMock,
+      sequelize: {
+        transaction: function() {
+          return {
+            commit: function() {},
+            rollback: function() {}
+          };
+        }
+      }
     }
   };
 }

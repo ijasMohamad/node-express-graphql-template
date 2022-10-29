@@ -1,6 +1,7 @@
-import db from '@database/models';
 import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
-import { student } from './query';
+import { GraphQLStudent } from './model';
+import db from '@database/models';
+import { customCreateResolver } from './customCreateResolver';
 
 export const studentsMutationFields = {
   id: { type: new GraphQLNonNull(GraphQLID) },
@@ -10,6 +11,7 @@ export const studentsMutationFields = {
 
 export const studentMutation = {
   args: studentsMutationFields,
-  type: student,
-  model: db.students
+  type: GraphQLStudent,
+  model: db.students,
+  customCreateResolver
 };

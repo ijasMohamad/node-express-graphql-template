@@ -1,12 +1,12 @@
-import { studentSubject, studentSubjectQuery, StudentSubjectConnection } from './query';
+import { GraphQLStudentSubject } from './model';
+import { studentSubjectConnection } from './list';
+import { StudentSubjectQueries } from './query';
 import { studentSubjectMutation } from './mutation';
 
-const StudentSubject = studentSubject;
+export const StudentSubject = GraphQLStudentSubject;
 
-// export const StudentSubjectConnection = studentSubjectConnection;
-export { StudentSubjectConnection, StudentSubject };
+export const StudentSubjectConnection = studentSubjectConnection;
 
-// queries on the studentSubjects table
-export const studentSubjectQueries = studentSubjectQuery;
+export const studentSubjectQueries = StudentSubjectQueries;
 
 export const studentSubjectMutations = studentSubjectMutation;

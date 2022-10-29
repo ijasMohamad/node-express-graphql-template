@@ -1,13 +1,16 @@
-import { studentQuery, StudentConnection, student } from './query';
+import { GraphQLStudent } from './model';
+import { studentConnection } from './list';
+import { StudentQueries } from './query';
 import { studentMutation } from './mutation';
 
-// imported GraphQLObjectType of student.
-const Student = student;
+// exporting graphql model of student.
+export const Student = GraphQLStudent;
 
-export { StudentConnection, Student };
+// exporting student connection.
+export const StudentConnection = studentConnection;
 
-// exporting queries on the students table.
-export const studentQueries = studentQuery;
+// exporting student queries.
+export const studentQueries = StudentQueries;
 
 // exporting mutations on the students table.
 export const studentMutations = studentMutation;

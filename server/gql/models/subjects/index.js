@@ -1,12 +1,12 @@
-import { subject, SubjectConnection, subjectQuery } from './query';
+import { GraphQLSubject } from './model';
+import { subjectConnection } from './list';
+import { SubjectQueries } from './query';
 import { subjectMutation } from './mutation';
 
-const Subject = subject;
+export const Subject = GraphQLSubject;
 
-export { SubjectConnection, Subject };
+export const SubjectConnection = subjectConnection;
 
-// queries on the subject table
-export const subjectQueries = subjectQuery;
+export const subjectQueries = SubjectQueries;
 
-// mutations on the subject table
 export const subjectMutations = subjectMutation;

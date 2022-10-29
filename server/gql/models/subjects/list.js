@@ -1,13 +1,13 @@
-import db from '@server/database/models';
-import { subject } from './query';
 import { createConnection } from 'graphql-sequelize';
+import db from '@server/database/models';
+import { GraphQLSubject } from './model';
 import { sequelizedWhere } from '@server/database/dbUtils';
 import { totalConnectionFields } from '@server/utils';
 
 export const subjectConnection = createConnection({
   name: 'subjects',
   target: db.subjects,
-  nodeType: subject,
+  nodeType: GraphQLSubject,
   before: (findOptions, args, context) => {
     findOptions.include = findOptions.include || [];
 

@@ -1,6 +1,6 @@
-import db from '@server/database/models';
 import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
-import { subject } from './query';
+import { GraphQLSubject } from './model';
+import db from '@server/database/models';
 import { customCreateResolver } from './customCreateResolver';
 
 export const subjectMutationFields = {
@@ -11,7 +11,7 @@ export const subjectMutationFields = {
 
 export const subjectMutation = {
   args: subjectMutationFields,
-  type: subject,
+  type: GraphQLSubject,
   model: db.subjects,
   customCreateResolver
 };

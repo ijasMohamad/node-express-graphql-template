@@ -1,11 +1,11 @@
-import { sequelizedWhere } from '@server/database/dbUtils';
-import db from '@server/database/models';
-import { totalConnectionFields } from '@server/utils';
 import { createConnection } from 'graphql-sequelize';
-import { studentSubject } from './query';
+import { GraphQLStudentSubject } from './model';
+import db from '@server/database/models';
+import { sequelizedWhere } from '@server/database/dbUtils';
+import { totalConnectionFields } from '@server/utils';
 
 export const studentSubjectConnection = createConnection({
-  nodeType: studentSubject,
+  nodeType: GraphQLStudentSubject,
   name: 'studentSubjects',
   target: db.studentSubjects,
   before: (findOptions, args, context) => {

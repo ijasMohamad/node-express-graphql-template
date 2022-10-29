@@ -1,26 +1,26 @@
-import { getNode } from '@server/gql/node';
-import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
-import { GraphQLID, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { studentQueries } from '../students';
-import { timestamps } from '@gqlFields/timestamps';
+import { GraphQLInt, GraphQLNonNull } from 'graphql';
+import { GraphQLSubject } from './model';
+import { subjectConnection } from './list';
+import { limitAndOffset } from '@server/gql/fields/limitAndOffset';
+import db from '@server/database/models';
 
-const { nodeInterface } = getNode();
-
-export const subjectFields = {
-  id: { type: new GraphQLNonNull(GraphQLID) },
-  name: { type: GraphQLString }
-};
-
-export const subject = new GraphQLObjectType({
-  name: 'Subject',
-  interfaces: [nodeInterface],
-  fields: () => ({
-    ...getQueryFields(subjectFields, TYPE_ATTRIBUTES.isNonNull),
-    ...timestamps,
-    students: {
-      ...studentQueries.list,
-      resolve: (source, args, context, info) =>
-        studentQueries.list.resolve(source, args, { ...context, subject: source.dataValues }, info)
+export const SubjectQueries = {
+  args: {
+    id: {
+      type: new GraphQLNonNull(GraphQLInt)
     }
-  })
-});
+  },
+  query: {
+    type: GraphQLSubject
+  },
+  list: {
+    ...subjectConnection,
+    resolve: subjectConnection.resolve,
+    type: subjectConnection.connectionType,
+    args: {
+      ...subjectConnection.connectionArgs,
+      ...limitAndOffset
+    }
+  },
+  model: db.subjects
+};

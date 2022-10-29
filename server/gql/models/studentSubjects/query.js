@@ -1,21 +1,22 @@
-import { getNode } from '@server/gql/node';
-import { getQueryFields, TYPE_ATTRIBUTES } from '@server/utils/gqlFieldUtils';
-import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import { timestamps } from '@gqlFields/timestamps';
+import { GraphQLInt, GraphQLNonNull } from 'graphql';
+import { GraphQLStudentSubject } from './model';
+import { studentSubjectConnection } from './list';
+import db from '@server/database/models';
 
-const { nodeInterface } = getNode();
-
-export const studentSubjectFields = {
-  id: { type: new GraphQLNonNull(GraphQLID) },
-  studentId: { type: new GraphQLNonNull(GraphQLID) },
-  subjectId: { type: new GraphQLNonNull(GraphQLID) }
+export const StudentSubjectQueries = {
+  args: {
+    id: {
+      type: new GraphQLNonNull(GraphQLInt)
+    }
+  },
+  query: {
+    type: GraphQLStudentSubject
+  },
+  list: {
+    ...studentSubjectConnection,
+    resolve: studentSubjectConnection.resolve,
+    type: studentSubjectConnection.connectionType,
+    args: studentSubjectConnection.connectionArgs
+  },
+  model: db.studentSubjects
 };
-
-export const studentSubject = new GraphQLObjectType({
-  name: 'StudentSubject',
-  interfaces: [nodeInterface],
-  fields: () => ({
-    ...getQueryFields(studentSubjectFields, TYPE_ATTRIBUTES.isNonNull),
-    ...timestamps
-  })
-});
